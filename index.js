@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const { chromium } = require("playwright");
 const fs = require('fs');
 const axios = require('axios');
@@ -6,46 +7,10 @@ const axios = require('axios');
 const app = express();
 const port = process.env.PORT || 3000;
 
+app.use(cors());
 app.get('/process-url', async (req, res) => {
     const url = req.query.url;
 
-    async function getImageWeight(url) {
-        try {
-            const response = await axios.head(url);
-            const bytesWeight = response.headers['content-length'];
-            const kbWeight = bytesWeight / 1024;
-            const mbWeight = (kbWeight / 1024).toFixed(3);
-            return mbWeight;
-        } catch (error) {
-            console.error(`Error al obtener el weight de la image ${url}: ${error.message}`);
-            return null;
-        }
-    }
-    
-    async function jsonProcess(path) {
-        try {
-            const jsonContent = fs.readFileSync(path, 'utf-8');
-            const data = JSON.parse(jsonContent);
-    
-            for (const image of data) {
-                if (image.url) {
-                    const weight = await getImageWeight(image.url);
-                    if (weight !== null) {
-                        image.mbWeight = weight;
-                    }
-                } else {
-                    console.error('La propiedad "url" no está definida en un objeto de image.');
-                }
-            }
-    
-            fs.writeFileSync(path, JSON.stringify(data, null, 2), 'utf-8');
-    
-            console.log('Proceso completado con éxito.');
-        } catch (error) {
-            console.error(`Error al procesar el archivo JSON: ${error.message}`);
-        }
-    }
-    
     ( async () => {
         const browser = await chromium.launch({
             headless: true
@@ -80,5 +45,42 @@ app.get('/process-url', async (req, res) => {
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
 })
+
+async function getImageWeight(url) {
+    try {
+        const response = await axios.head(url);
+        const bytesWeight = response.headers['content-length'];
+        const kbWeight = bytesWeight / 1024;
+        const mbWeight = (kbWeight / 1024).toFixed(3);
+        return mbWeight;
+    } catch (error) {
+        console.error(`Error al obtener el weight de la image ${url}: ${error.message}`);
+        return null;
+    }
+}
+
+async function jsonProcess(path) {
+    try {
+        const jsonContent = fs.readFileSync(path, 'utf-8');
+        const data = JSON.parse(jsonContent);
+
+        for (const image of data) {
+            if (image.url) {
+                const weight = await getImageWeight(image.url);
+                if (weight !== null) {
+                    image.mbWeight = weight;
+                }
+            } else {
+                console.error('La propiedad "url" no está definida en un objeto de image.');
+            }
+        }
+
+        fs.writeFileSync(path, JSON.stringify(data, null, 2), 'utf-8');
+
+        console.log('Proceso completado con éxito.');
+    } catch (error) {
+        console.error(`Error al procesar el archivo JSON: ${error.message}`);
+    }
+}
 
 
