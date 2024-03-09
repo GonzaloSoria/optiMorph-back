@@ -7,7 +7,13 @@ const axios = require('axios');
 const app = express();
 const port = process.env.PORT || 3000;
 
-app.use(cors());
+const corsOptions = {
+    origin: '*',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    allowedHeaders: '*',
+};
+app.use(cors(corsOptions));
+
 app.get('/process-url', async (req, res) => {
     // Obtener la URL completa desde req.url
     const fullUrl = req.url;
