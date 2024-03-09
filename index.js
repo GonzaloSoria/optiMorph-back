@@ -13,6 +13,7 @@ const corsOptions = {
     allowedHeaders: '*',
 };
 app.use(cors(corsOptions));
+app.options('/process-url', cors(corsOptions));
 
 app.get('/process-url', async (req, res) => {
     // Obtener la URL completa desde req.url
