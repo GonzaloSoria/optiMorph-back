@@ -9,7 +9,12 @@ const port = process.env.PORT || 3000;
 
 app.use(cors());
 app.get('/process-url', async (req, res) => {
-    const url = req.query.url;
+    // Obtener la URL completa desde req.url
+    const fullUrl = req.url;
+    // Parsear la URL
+    const parsedUrl = new URL(fullUrl, `https://${req.headers.host}`);
+    // Obtener el parámetro 'url' y decodificarlo
+    const decodedUrl = decodeURIComponent(parsedUrl.searchParams.get('url'));
 
     ( async () => {
         const browser = await chromium.launch({
@@ -17,7 +22,7 @@ app.get('/process-url', async (req, res) => {
         });
         const context = await browser.newContext();
         const page = await context.newPage();
-        await page.goto(url);
+        await page.goto(decodedUrl);
         await page.waitForLoadState('domcontentloaded');
     
         const imagesUrls = await page.evaluate(() => {
