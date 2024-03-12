@@ -13,6 +13,7 @@ const corsOptions = {
     allowedHeaders: '*',
 };
 app.use(cors(corsOptions));
+app.use(express.json());
 app.options('/process-url', cors(corsOptions));
 
 app.get('/process-url', async (req, res) => {
@@ -42,6 +43,9 @@ app.get('/process-url', async (req, res) => {
     
             return images;
         })
+
+        console.log(imagesUrls);
+        
     
         fs.writeFileSync('images.json', JSON.stringify(imagesUrls, null, 2))
     
@@ -49,9 +53,20 @@ app.get('/process-url', async (req, res) => {
         await jsonProcess(jsonPath);
     
         await browser.close();
-    })();
+        res.sendFile(jsonPath, { root: __dirname });
 
-    res.send(imagesUrls)
+        setTimeout(() => {
+            fs.closeSync(fs.openSync(jsonPath, 'w'));
+            fs.unlink(jsonPath, (err) => {
+                if (err) {
+                    console.error(`Error al eliminar el archivo JSON: ${err.message}`);
+                } else {
+                    console.log('Archivo JSON eliminado con éxito.');
+                }
+            });
+        }, 10000)
+        
+    })();
 })
 
 app.listen(port, () => {
@@ -75,7 +90,6 @@ async function jsonProcess(path) {
     try {
         const jsonContent = fs.readFileSync(path, 'utf-8');
         const data = JSON.parse(jsonContent);
-
         for (const image of data) {
             if (image.url) {
                 const weight = await getImageWeight(image.url);
