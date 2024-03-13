@@ -16,8 +16,6 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.options('/process-url', cors(corsOptions));
 
-const executablePath = chromium.executablePath
-
 app.get('/process-url', async (req, res) => {
     // Obtener la URL completa desde req.url
     const fullUrl = req.url;
@@ -28,7 +26,6 @@ app.get('/process-url', async (req, res) => {
 
     ( async () => {
         const browser = await chromium.launch({
-            executablePath: 'C:\Program Files\Google\Chrome\Application\chrome.exe',
             headless: true
         });
         const context = await browser.newContext();
