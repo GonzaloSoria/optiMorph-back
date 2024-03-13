@@ -9,7 +9,7 @@
   "routes": [
     {
       "src": "https://opti-morph-back.vercel.app/process-url",
-      "dest": "/",
+      "dest": "./index.js",
       "methods": ["GET", "POST"],
       "headers": {
         "Access-Control-Allow-Origin": "*"
