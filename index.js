@@ -28,7 +28,7 @@ app.get('/process-url', async (req, res) => {
 
     ( async () => {
         const browser = await chromium.launch({
-            executablePath: executablePath,
+            executablePath: 'C:\Program Files\Google\Chrome\Application\chrome.exe',
             headless: true
         });
         const context = await browser.newContext();
