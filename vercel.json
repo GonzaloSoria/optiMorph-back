@@ -9,7 +9,7 @@
   "routes": [
     {
       "src": "/process-url",
-      "dest": "./",
+      "dest": "./index.html",
       "methods": ["GET", "POST"],
       "headers": {
         "Access-Control-Allow-Origin": "*"
