@@ -8,7 +8,7 @@
   ],
   "routes": [
     {
-      "src": "/(.*)",
+      "src": "/process-url",
       "dest": "./index.js",
       "methods": ["GET", "POST"],
       "headers": {
