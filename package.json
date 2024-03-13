@@ -16,6 +16,8 @@
     "fs": "^0.0.1-security",
     "image-size": "^1.1.1",
     "playwright": "^1.42.0",
+    "playwright-chromium": "^1.42.1",
+    "playwright-core": "^1.42.1",
     "sharp": "^0.33.2"
   }
 }

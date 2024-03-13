@@ -26,7 +26,6 @@ app.get('/process-url', async (req, res) => {
 
     ( async () => {
         const browser = await chromium.launch({
-            executablePath: 'C:\Users\gsoria1\OneDrive - Lenovo\Desktop\files\personal-projects\optiMorph\backend\node_modules\playwright-core\lib\server\chromium',
             headless: true
         });
         const context = await browser.newContext();
