@@ -8,7 +8,7 @@
   ],
   "routes": [
     {
-      "src": "https://opti-morph-back.vercel.app/process-url",
+      "src": "/(.*)",
       "dest": "./index.js",
       "methods": ["GET", "POST"],
       "headers": {
