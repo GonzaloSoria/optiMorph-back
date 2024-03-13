@@ -8,7 +8,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 const corsOptions = {
-    origin: '*',
+    origin: 'http://localhost:4321/',
     methods: 'GET',
     allowedHeaders: '*',
 };
